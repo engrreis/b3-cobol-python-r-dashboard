@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Dashboard B3 – COBOL x Python x R</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Chart.js para o gráfico de barras dos engines -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Dygraphs para séries temporais -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.2.1/dygraph.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.2.1/dygraph.min.js"></script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>COBOL x Python x R</h1>
+    <p class="subtitle">
+      Log-retornos, volatilidade, liquidez e HHI com motores em COBOL, Python e R
+    </p>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- SEÇÃO 1: ENGINES -->
+    <section id="engines">
+      <h2>Comparação de desempenho dos motores</h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Tempo de execução (s)</h3>
+          <canvas id="enginePerformanceChart"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>Resumo visual</h3>
+          <img src="img/engine_times.png" alt="Gráfico de tempos por engine" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: MERCADO (HHI, Volume, Negócios, Retorno diário) -->
+    <section id="market">
+      <h2>Indicadores de mercado (janela móvel)</h2>
+    
+      <div class="grid-2">
+        <div class="card">
+          <h3>HHI ao longo do tempo</h3>
+          <div id="hhiDygraph" class="dyg"></div>
+        </div>
+      
+        <div class="card">
+          <h3>Volume total da janela</h3>
+          <div id="volumeDygraph" class="dyg"></div>
+        </div>
+      </div>
+    
+      <div class="grid-2">
+        <div class="card">
+          <h3>Número total de negócios</h3>
+          <div id="tradesDygraph" class="dyg"></div>
+        </div>
+      
+        <div class="card">
+          <h3>Retorno médio diário do mercado</h3>
+          <div id="dailyReturnDygraph" class="dyg"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SEÇÃO 3: ATIVOS (PNGs geradas em Python) -->
+    <section id="assets">
+      <h2>Indicadores por ativo (última janela)</h2>
+
+      <div class="card">
+        <h3>Retorno x Volatilidade (última janela)</h3>
+        <img
+          src="img/scatter_ret_vol_python.png"
+          alt="Scatter retorno vs volatilidade"
+        />
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Top 20 por liquidez</h3>
+          <img
+            src="img/ranking_liquidez_python.png"
+            alt="Ranking por liquidez"
+          />
+        </div>
+
+        <div class="card">
+          <h3>Top 20 por volatilidade</h3>
+          <img
+            src="img/ranking_vol_python.png"
+            alt="Ranking por volatilidade"
+          />
+        </div>
+
+        <div class="card">
+          <h3>Top 20 por retorno</h3>
+          <img
+            src="img/ranking_retorno_python.png"
+            alt="Ranking por retorno"
+          />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      Dados: PriceReport B3 (BVBG.086.01, bvmf.217.01, XML v5.0) ·
+      Motores: COBOL (GnuCOBOL), Python (pandas/NumPy) e R (dplyr/zoo)
+    </p>
+  </footer>
+
+  <!-- JS do dashboard (Chart.js + carregamento de dados) -->
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+# ================================
+# Configuração de finais de linha
+# ================================
+
+# Normaliza todos os arquivos de texto para LF no repositório
+* text=auto eol=lf
+
+# Scripts e Makefiles sempre com LF
+*.sh text eol=lf
+Makefile* text eol=lf
+
+# Código COBOL
+*.cob text eol=lf
+*.cpy text eol=lf
+
+# Código C/C++ (se houver)
+*.c text eol=lf
+*.h text eol=lf
+
+# Python
+*.py text eol=lf
+
+# R
+*.R text eol=lf
+*.r text eol=lf
+
+# CSV e dados
+*.csv text eol=lf
+
+# Markdown e documentação
+*.md text eol=lf
+*.txt text eol=lf
+
+# ================================
+# Arquivos binários (não mexer em EOL)
+# ================================
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.exe binary
+*.dll binary
