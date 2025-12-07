@@ -1,0 +1,17 @@
+# Arquivos brutos gigantes da B3 (não versionar)
+data/BVBG.086.01_*.xml
+data/pricereport_week.csv
+data/Catalogo_precos_v1.3.pdf
+
+# Logs, processamentos auxiliares e executáveis
+processados/*.csv
+cobol/*.exe
+python/__pycache__/
+*.pyc
+
+# Ambiente
+.Rhistory
+.RData
+
+# Editor
+.vscode/
