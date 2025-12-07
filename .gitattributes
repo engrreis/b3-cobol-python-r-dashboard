@@ -1,7 +1,7 @@
 # ================================
 # Configuração de finais de linha
 # ================================
-
+Makefile linguist-vendored
 # Normaliza todos os arquivos de texto para LF no repositório
 * text=auto eol=lf
 
