@@ -1,132 +1,354 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
   <title>Dashboard B3 – COBOL x Python x R</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css">
 
-  <!-- Chart.js para o gráfico de barras dos engines -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <!-- Dygraphs para séries temporais -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.2.1/dygraph.min.css"
-  />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.2.1/dygraph.min.js"></script>
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
-  <!-- HEADER -->
-  <header>
-    <h1>COBOL x Python x R</h1>
-    <p class="subtitle">
-      Log-retornos, volatilidade, liquidez e HHI com motores em COBOL, Python e R
-    </p>
+  <!-- ============================================================= -->
+  <!-- Header                                                        -->
+  <!-- ============================================================= -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1>Dashboard B3 – COBOL x Python x R</h1>
+      <p class="subtitle">
+        Benchmark de motores COBOL, Python e R sobre dados reais da B3
+        (PriceReport BVBG.086.01 / bvmf.217.01 v5.0), com foco em
+        retornos, volatilidade, liquidez e concentração de mercado.
+      </p>
+    </div>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main>
-    <!-- SEÇÃO 1: ENGINES -->
-    <section id="engines">
-      <h2>Comparação de desempenho dos motores</h2>
+  <main class="page">
+    <!-- ============================================================= -->
+    <!-- 1. Desempenho dos motores                                     -->
+    <!-- ============================================================= -->
+    <section class="section">
+      <h2>Desempenho dos motores</h2>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>Tempo de execução (s)</h3>
-          <canvas id="enginePerformanceChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>Resumo visual</h3>
-          <img src="img/engine_times.png" alt="Gráfico de tempos por engine" />
-        </div>
+      <div class="grid-1">
+        <article class="card">
+          <header class="card-header">
+            <h3>Tempo total de execução</h3>
+            <p class="card-subtitle">
+              Tempo para processar a mesma amostra do PriceReport:
+              leitura do CSV consolidado, cálculo de retornos diários,
+              volatilidade, métricas de liquidez e HHI.
+            </p>
+          </header>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chartEngineTimes"></canvas>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
-    <!-- SEÇÃO 2: MERCADO (HHI, Volume, Negócios, Retorno diário) -->
-    <section id="market">
-      <h2>Indicadores de mercado (janela móvel)</h2>
-    
+    <!-- ============================================================= -->
+    <!-- 2. Indicadores de mercado (janela móvel de 5 pregões)         -->
+    <!-- ============================================================= -->
+    <section class="section">
+      <h2>Indicadores agregados de mercado (janela de 5 pregões)</h2>
+
       <div class="grid-2">
-        <div class="card">
-          <h3>HHI ao longo do tempo</h3>
-          <div id="hhiDygraph" class="dyg"></div>
-        </div>
-      
-        <div class="card">
-          <h3>Volume total da janela</h3>
-          <div id="volumeDygraph" class="dyg"></div>
-        </div>
+        <article class="card">
+          <header class="card-header">
+            <h3>HHI da liquidez</h3>
+            <p class="card-subtitle">
+              Índice de Herfindahl–Hirschman calculado sobre a participação
+              de volume financeiro de cada ativo na janela móvel de 5 pregões.
+            </p>
+          </header>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chartHHI"></canvas>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-header">
+            <h3>Volume financeiro total</h3>
+            <p class="card-subtitle">
+              Volume financeiro agregado (R$ milhões) das ações da amostra
+              na janela móvel.
+            </p>
+          </header>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chartVolume"></canvas>
+            </div>
+          </div>
+        </article>
       </div>
-    
+
       <div class="grid-2">
-        <div class="card">
-          <h3>Número total de negócios</h3>
-          <div id="tradesDygraph" class="dyg"></div>
-        </div>
-      
-        <div class="card">
-          <h3>Retorno médio diário do mercado</h3>
-          <div id="dailyReturnDygraph" class="dyg"></div>
-        </div>
+        <article class="card">
+          <header class="card-header">
+            <h3>Número de negócios</h3>
+            <p class="card-subtitle">
+              Quantidade total de negócios regulares (<code>RglrTxsQty</code>)
+              na mesma janela de 5 pregões.
+            </p>
+          </header>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chartNegocios"></canvas>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-header">
+            <h3>Retorno médio diário do mercado</h3>
+            <p class="card-subtitle">
+              Média dos log-retornos diários dos ativos, usando preços de
+              fechamento (<code>LastPric</code>), em cada pregão.
+            </p>
+          </header>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chartReturns"></canvas>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
+    <!-- ============================================================= -->
+    <!-- 3. Indicadores por ativo (última janela – motor Python)       -->
+    <!-- ============================================================= -->
+    <section class="section">
+      <h2>Indicadores por ativo (última janela – motor Python)</h2>
 
-    <!-- SEÇÃO 3: ATIVOS (PNGs geradas em Python) -->
-    <section id="assets">
-      <h2>Indicadores por ativo (última janela)</h2>
-
-      <div class="card">
-        <h3>Retorno x Volatilidade (última janela)</h3>
-        <img
-          src="img/scatter_ret_vol_python.png"
-          alt="Scatter retorno vs volatilidade"
-        />
+      <div class="grid-1">
+        <article class="card">
+          <header class="card-header">
+            <h3>Retorno x volatilidade</h3>
+            <p class="card-subtitle">
+              Cada ponto representa um ativo na última janela de 5 pregões:
+              retorno acumulado na janela (eixo X) vs. volatilidade realizada
+              (eixo Y).
+            </p>
+          </header>
+          <div class="card-body card-body-image">
+            <img src="img/scatter_ret_vol_python.png"
+                 alt="Diagrama de retorno x volatilidade dos ativos"
+                 loading="lazy">
+          </div>
+        </article>
       </div>
 
       <div class="grid-3">
-        <div class="card">
-          <h3>Top 20 por liquidez</h3>
-          <img
-            src="img/ranking_liquidez_python.png"
-            alt="Ranking por liquidez"
-          />
-        </div>
+        <article class="card">
+          <header class="card-header">
+            <h3>Top 20 – Liquidez</h3>
+            <p class="card-subtitle">
+              Ativos com maior volume financeiro negociado na última janela.
+            </p>
+          </header>
+          <div class="card-body card-body-image">
+            <img src="img/ranking_liquidez_python.png"
+                 alt="Ranking de liquidez por volume financeiro"
+                 loading="lazy">
+          </div>
+        </article>
 
-        <div class="card">
-          <h3>Top 20 por volatilidade</h3>
-          <img
-            src="img/ranking_vol_python.png"
-            alt="Ranking por volatilidade"
-          />
-        </div>
+        <article class="card">
+          <header class="card-header">
+            <h3>Top 20 – Volatilidade</h3>
+            <p class="card-subtitle">
+              Ativos com maior volatilidade realizada (N=5).
+            </p>
+          </header>
+          <div class="card-body card-body-image">
+            <img src="img/ranking_vol_python.png"
+                 alt="Ranking de volatilidade realizada"
+                 loading="lazy">
+          </div>
+        </article>
 
-        <div class="card">
-          <h3>Top 20 por retorno</h3>
-          <img
-            src="img/ranking_retorno_python.png"
-            alt="Ranking por retorno"
-          />
-        </div>
+        <article class="card">
+          <header class="card-header">
+            <h3>Top 20 – Retorno</h3>
+            <p class="card-subtitle">
+              Ativos com maior retorno acumulado na última janela.
+            </p>
+          </header>
+          <div class="card-body card-body-image">
+            <img src="img/ranking_retorno_python.png"
+                 alt="Ranking de retorno acumulado"
+                 loading="lazy">
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 4. Metodologia e fórmulas                                      -->
+    <!-- ============================================================= -->
+    <section class="section">
+      <h2>Metodologia e fórmulas</h2>
+
+      <div class="grid-2">
+        <!-- Universo de dados -->
+        <article class="card">
+          <header class="card-header">
+            <h3>1. Universo de dados</h3>
+          </header>
+          <div class="card-body">
+            <ul>
+              <li>
+                Fonte: mensagens <code>BVBG.086.01</code> (PriceReport),
+                layout <code>bvmf.217.01</code>, XML v5.0 da B3.
+              </li>
+              <li>
+                Filtro: <code>InstrType = "ACAO"</code> (ações à vista),
+                descartando termos, opções e fracionário.
+              </li>
+              <li>
+                Campos utilizados: <code>TradeDate</code>,
+                <code>TickerSymbol</code>, <code>NtlFinVol</code>,
+                <code>RglrTxsQty</code>, <code>LastPric</code>.
+              </li>
+              <li>
+                ETL em Python consolida os XMLs em
+                <code>data/pricereport_acoes.csv</code>.
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Retornos e volatilidade -->
+        <article class="card">
+          <header class="card-header">
+            <h3>2. Retorno e volatilidade realizada</h3>
+          </header>
+          <div class="card-body">
+            <p><strong>Log-retorno diário</strong> do ativo \(i\) no dia \(t\):</p>
+            \[
+              r_{i,t} = \ln\left(\frac{P_{i,t}}{P_{i,t-1}}\right)
+            \]
+            <p>onde \(P_{i,t}\) é o preço de fechamento
+               (<code>LastPric</code>) no pregão \(t\).</p>
+
+            <p><strong>Volatilidade realizada</strong> em janela de \(N=5\) pregões:</p>
+            \[
+              \sigma_i =
+              \sqrt{
+                \frac{1}{N-1}
+                \sum_{t=1}^{N}
+                \left(r_{i,t} - \bar{r}_i\right)^2
+              }
+            \]
+            <p>com \(\bar{r}_i\) sendo a média dos log-retornos na janela.</p>
+
+            <p><strong>Anualização</strong> (252 pregões):</p>
+            \[
+              \sigma_{\text{anual}} = \sigma_{\text{diária}} \cdot \sqrt{252}
+            \]
+          </div>
+        </article>
+      </div>
+
+      <div class="grid-2">
+        <!-- Liquidez e HHI -->
+        <article class="card">
+          <header class="card-header">
+            <h3>3. Liquidez e concentração de mercado</h3>
+          </header>
+          <div class="card-body">
+            <p><strong>Volume financeiro na janela</strong> para o ativo \(i\):</p>
+            \[
+              V_i = \sum_{t=1}^{N} \text{NtlFinVol}_{i,t}
+            \]
+
+            <p><strong>Número total de negócios:</strong></p>
+            \[
+              Q_i = \sum_{t=1}^{N} \text{RglrTxsQty}_{i,t}
+            \]
+
+            <p><strong>Índice de liquidez</strong> (proxy simples):</p>
+            \[
+              ILiq_i = \frac{V_i}{Q_i}
+            \]
+
+            <p><strong>Participação de volume</strong> de cada ativo:</p>
+            \[
+              s_i = \frac{V_i}{\sum_j V_j}
+            \]
+
+            <p><strong>Índice de Herfindahl–Hirschman (HHI):</strong></p>
+            \[
+              HHI = \sum_i s_i^2
+            \]
+            <p>
+              Valores próximos de 1 indicam alta concentração da liquidez em poucos
+              ativos; valores menores sugerem distribuição mais difusa.
+            </p>
+          </div>
+        </article>
+
+        <!-- Arquitetura -->
+        <article class="card">
+          <header class="card-header">
+            <h3>4. Arquitetura e benchmark</h3>
+          </header>
+          <div class="card-body">
+            <ul>
+              <li>
+                <strong>COBOL (GnuCOBOL)</strong>:
+                leitura sequencial do CSV, agregações em memória e cálculo
+                iterativo das métricas; saída em CSV + log de tempo.
+              </li>
+              <li>
+                <strong>Python (pandas / NumPy / matplotlib)</strong>:
+                mesma lógica utilizando DataFrames e operações vetorizadas;
+                gera CSVs equivalentes e gráficos estáticos (PNG).
+              </li>
+              <li>
+                <strong>R (tidyverse/data.table)</strong>:
+                terceira implementação, com foco em manipulação estatística.
+              </li>
+              <li>
+                Os tempos de execução dos três motores são consolidados em
+                <code>engine_stats.json</code> e exibidos no gráfico de barras
+                na seção de desempenho.
+              </li>
+            </ul>
+          </div>
+        </article>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
+  <footer class="footer">
     <p>
-      Dados: PriceReport B3 (BVBG.086.01, bvmf.217.01, XML v5.0) ·
-      Motores: COBOL (GnuCOBOL), Python (pandas/NumPy) e R (dplyr/zoo)
+      Dados: PriceReport B3 (BVBG.086.01 / bvmf.217.01 v5.0).
+      &mdash; Motores: COBOL (GnuCOBOL), Python (pandas &amp; matplotlib) e R (tidyverse).
     </p>
   </footer>
 
-  <!-- JS do dashboard (Chart.js + carregamento de dados) -->
+  <!-- JS -->
   <script src="js/dashboard.js"></script>
 </body>
 </html>
