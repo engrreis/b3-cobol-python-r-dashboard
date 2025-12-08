@@ -1,19 +1,44 @@
-# ================================
+# =====================================
+# Linguagens principais do projeto
+# =====================================
+
+# Forçar detecção de COBOL, Python e R
+*.cob linguist-detectable=true
+*.cpy linguist-detectable=true
+*.py linguist-detectable=true
+*.R  linguist-detectable=true
+*.r  linguist-detectable=true
+
+# Excluir Makefile da análise de linguagem
+Makefile linguist-detectable=false
+Makefile.* linguist-detectable=false
+*.mk linguist-detectable=false
+
+# Excluir arquivos C usados pelo runtime do GNUCobol
+bin/*.c linguist-detectable=false
+bin/*.h linguist-detectable=false
+
+# Excluir arquivos grandes de configuração (não contam como código)
+*.in linguist-detectable=false
+*.am linguist-detectable=false
+
+# Excluir arquivos minificados e de build
+docs/js/*.js linguist-vendored=true
+
+# =====================================
 # Configuração de finais de linha
-# ================================
-Makefile linguist-vendored
-# Normaliza todos os arquivos de texto para LF no repositório
+# =====================================
+
 * text=auto eol=lf
 
-# Scripts e Makefiles sempre com LF
+# Scripts
 *.sh text eol=lf
-Makefile* text eol=lf
 
-# Código COBOL
+# COBOL
 *.cob text eol=lf
 *.cpy text eol=lf
 
-# Código C/C++ (se houver)
+# C/C++
 *.c text eol=lf
 *.h text eol=lf
 
@@ -24,16 +49,17 @@ Makefile* text eol=lf
 *.R text eol=lf
 *.r text eol=lf
 
-# CSV e dados
+# Dados
 *.csv text eol=lf
 
-# Markdown e documentação
+# Documentação
 *.md text eol=lf
 *.txt text eol=lf
 
-# ================================
-# Arquivos binários (não mexer em EOL)
-# ================================
+# =====================================
+# Arquivos binários
+# =====================================
+
 *.png binary
 *.jpg binary
 *.jpeg binary
